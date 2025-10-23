@@ -1,0 +1,102 @@
+﻿@model QuanLyNhaTro.Models.HopDong
+
+@{
+    ViewData["Title"] = "Thêm Hợp Đồng Mới";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="PhongId" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-door-open"></i></span>
+                    <select asp-for="PhongId" class="form-select" asp-items="ViewBag.PhongId">
+                        <option value="">-- Chọn phòng --</option>
+                    </select>
+                </div>
+                <span asp-validation-for="PhongId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="NguoiThueId" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <select asp-for="NguoiThueId" class="form-select" asp-items="ViewBag.NguoiThueId">
+                        <option value="">-- Chọn người thuê --</option>
+                    </select>
+                </div>
+                <span asp-validation-for="NguoiThueId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="NgayBatDau" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    <input asp-for="NgayBatDau" type="date" class="form-control" placeholder="dd/mm/yyyy" />
+                </div>
+                <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="NgayKetThuc" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+                    <input asp-for="NgayKetThuc" type="date" class="form-control" placeholder="dd/mm/yyyy" />
+                </div>
+                <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+                <small class="text-muted">Để trống nếu chưa xác định</small>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="anhHopDong" class="form-label">
+                <i class="fas fa-file-image me-2"></i>Ảnh Hợp Đồng (Scan)
+            </label>
+            <input type="file" name="anhHopDong" id="anhHopDong" class="form-control" accept="image/*" />
+            <small class="text-muted">Chấp nhận: JPG, PNG, PDF. Kích thước tối đa: 5MB</small>
+        </div>
+
+        <div class="mb-3" id="imagePreview" style="display: none;">
+            <label class="form-label">Xem trước:</label>
+            <div class="border rounded p-2" style="max-width: 400px;">
+                <img id="preview" src="#" alt="Preview" style="max-width: 100%; height: auto;" />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Tạo mới
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById('anhHopDong').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

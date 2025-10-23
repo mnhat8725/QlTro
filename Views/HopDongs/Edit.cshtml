@@ -1,0 +1,112 @@
+﻿@model QuanLyNhaTro.Models.HopDong
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Hợp Đồng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+<h4 class="text-muted mb-3">Hợp đồng: @Model.Phong?.TenPhong - @Model.NguoiThue?.HoTen</h4>
+<hr />
+
+<div class="form-card">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="AnhHopDongUrl" />
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="PhongId" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-door-open"></i></span>
+                    <select asp-for="PhongId" class="form-select" asp-items="ViewBag.PhongId"></select>
+                </div>
+                <span asp-validation-for="PhongId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="NguoiThueId" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <select asp-for="NguoiThueId" class="form-select" asp-items="ViewBag.NguoiThueId"></select>
+                </div>
+                <span asp-validation-for="NguoiThueId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="NgayBatDau" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    <input asp-for="NgayBatDau" type="date" class="form-control" placeholder="dd/mm/yyyy" />
+                </div>
+                <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="NgayKetThuc" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+                    <input asp-for="NgayKetThuc" type="date" class="form-control" placeholder="dd/mm/yyyy" />
+                </div>
+                <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.AnhHopDongUrl))
+        {
+            <div class="mb-3">
+                <label class="form-label">Ảnh hợp đồng hiện tại:</label>
+                <div class="border rounded p-2" style="max-width: 400px;">
+                    <img src="@Model.AnhHopDongUrl" alt="Hợp đồng" style="max-width: 100%; height: auto;" />
+                </div>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label for="anhHopDong" class="form-label">
+                <i class="fas fa-file-image me-2"></i>
+                @(string.IsNullOrEmpty(Model.AnhHopDongUrl) ? "Thêm ảnh hợp đồng" : "Thay đổi ảnh hợp đồng")
+            </label>
+            <input type="file" name="anhHopDong" id="anhHopDong" class="form-control" accept="image/*" />
+            <small class="text-muted">Để trống nếu không muốn thay đổi</small>
+        </div>
+
+        <div class="mb-3" id="imagePreview" style="display: none;">
+            <label class="form-label">Xem trước ảnh mới:</label>
+            <div class="border rounded p-2" style="max-width: 400px;">
+                <img id="preview" src="#" alt="Preview" style="max-width: 100%; height: auto;" />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Lưu thay đổi
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById('anhHopDong').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

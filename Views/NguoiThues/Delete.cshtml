@@ -1,0 +1,68 @@
+﻿@model QuanLyNhaTro.Models.NguoiThue
+
+@{
+    ViewData["Title"] = "Xác Nhận Xóa Người Thuê";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Cảnh báo!</h4>
+        <p>Bạn có chắc chắn muốn xóa người thuê này không? Hành động này không thể hoàn tác.</p>
+        <hr>
+        <p class="mb-0"><small><i class="fas fa-info-circle me-1"></i>Lưu ý: Nếu người này đang có hợp đồng, hãy xóa hợp đồng trước.</small></p>
+    </div>
+
+    <hr class="my-4" />
+
+    <div>
+        <h4>Thông tin người thuê sẽ bị xóa:</h4>
+        <dl class="row mt-3">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.HoTen)
+            </dt>
+            <dd class="col-sm-8">
+                <strong>@Html.DisplayFor(model => model.HoTen)</strong>
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.SoCCCD)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Html.DisplayFor(model => model.SoCCCD)
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.SoDienThoai)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Html.DisplayFor(model => model.SoDienThoai)
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.QueQuan)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Html.DisplayFor(model => model.QueQuan)
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.NoiLamViec)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Html.DisplayFor(model => model.NoiLamViec)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>Xác nhận Xóa
+            </button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">
+                <i class="fas fa-times me-2"></i>Hủy
+            </a>
+        </form>
+    </div>
+</div>

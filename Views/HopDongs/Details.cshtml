@@ -1,0 +1,116 @@
+﻿@model QuanLyNhaTro.Models.HopDong
+
+@{
+    ViewData["Title"] = "Chi Tiết Hợp Đồng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="mb-4">
+                <i class="fas fa-file-contract me-2" style="color: #3f51b5;"></i>
+                Thông tin hợp đồng
+            </h3>
+
+            <dl class="row">
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-door-open me-2"></i>
+                    Phòng
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    <strong>@Model.Phong!.TenPhong</strong>
+                </dd>
+
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-user me-2"></i>
+                    Người thuê
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    <strong>@Model.NguoiThue!.HoTen</strong>
+                    <br>
+                    <small class="text-muted">
+                        <i class="fas fa-phone me-1"></i>
+                        @Model.NguoiThue.SoDienThoai
+                    </small>
+                </dd>
+
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    Ngày bắt đầu
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    @Model.NgayBatDau.ToString("dd/MM/yyyy")
+                </dd>
+
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-calendar-check me-2"></i>
+                    Ngày kết thúc
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    @if (Model.NgayKetThuc.HasValue)
+                    {
+                        @Model.NgayKetThuc.Value.ToString("dd/MM/yyyy")
+                    }
+                    else
+                    {
+                        <span class="badge bg-info">Chưa xác định</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-clock me-2"></i>
+                    Thời gian thuê
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    @{
+                        var ngayKetThuc = Model.NgayKetThuc ?? DateTime.Now;
+                        var soNgay = (ngayKetThuc - Model.NgayBatDau).Days;
+                        var soThang = soNgay / 30;
+                    }
+                    <strong>@soThang tháng</strong> (@soNgay ngày)
+                </dd>
+            </dl>
+        </div>
+
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(Model.AnhHopDongUrl))
+            {
+                <div class="card" style="border: none; background-color: #f8f9fa;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-file-image me-2"></i>Ảnh hợp đồng
+                        </h5>
+                        <img src="@Model.AnhHopDongUrl" alt="Hợp đồng" class="img-fluid rounded" style="max-width: 100%;" />
+                        <div class="text-center mt-3">
+                            <a href="@Model.AnhHopDongUrl" target="_blank" class="btn btn-sm btn-primary">
+                                <i class="fas fa-external-link-alt me-1"></i>Xem đầy đủ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card" style="border: none; background-color: #f8f9fa;">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-contract" style="font-size: 80px; color: #dee2e6; margin-bottom: 15px;"></i>
+                        <p class="text-muted">Chưa có ảnh hợp đồng</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Chỉnh sửa
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+        </a>
+    </div>
+</div>

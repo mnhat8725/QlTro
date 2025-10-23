@@ -1,0 +1,52 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Đăng ký";
+    Layout = "_AuthLayout";
+}
+
+<div class="auth-form-container">
+    <h2 class="auth-title">Đăng Ký Tài Khoản</h2>
+
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+        <div class="input-group">
+            <label asp-for="Input.Email">Email</label>
+            <div class="input-field">
+                <i class="fas fa-envelope"></i>
+                <input asp-for="Input.Email" placeholder="Nhập địa chỉ email" autocomplete="username" aria-required="true" />
+            </div>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="input-group">
+            <label asp-for="Input.Password">Mật khẩu</label>
+            <div class="input-field">
+                <i class="fas fa-lock"></i>
+                <input asp-for="Input.Password" placeholder="Nhập mật khẩu" autocomplete="new-password" aria-required="true" />
+            </div>
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="input-group">
+            <label asp-for="Input.ConfirmPassword">Xác nhận mật khẩu</label>
+            <div class="input-field">
+                <i class="fas fa-lock"></i>
+                <input asp-for="Input.ConfirmPassword" placeholder="Nhập lại mật khẩu" autocomplete="new-password" aria-required="true" />
+            </div>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <button id="registerSubmit" type="submit" class="auth-button">ĐĂNG KÝ</button>
+
+        <div class="signup-link">
+            <p>Đã có tài khoản?</p>
+            <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">ĐĂNG NHẬP</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

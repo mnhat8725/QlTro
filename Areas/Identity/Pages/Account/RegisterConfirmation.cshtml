@@ -1,0 +1,62 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Xác nhận đăng ký";
+    Layout = "_AuthLayout";
+}
+
+<div class="auth-form-container">
+    <div class="auth-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+        <i class="fas fa-envelope-open-text"></i>
+    </div>
+
+    <h2 class="auth-title">Kiểm Tra Email Của Bạn!</h2>
+
+    @if (@Model.DisplayConfirmAccountLink)
+    {
+        <p class="auth-subtitle">
+            Bạn cần xác thực email trước khi đăng nhập.
+        </p>
+        <div class="alert alert-info" style="text-align: left; margin: 20px 0;">
+            <a id="confirm-link" href="@Model.EmailConfirmationUrl" style="color: #667eea; text-decoration: underline;">
+                Nhấn vào đây để xác thực Email ngay
+            </a>
+        </div>
+    }
+    else
+    {
+        <p class="auth-subtitle">
+            Chúng tôi đã gửi email xác nhận đến địa chỉ <strong>@Model.Email</strong>.
+            <br><br>
+            Vui lòng kiểm tra hộp thư (kể cả thư rác) và nhấn vào link xác thực để kích hoạt tài khoản.
+        </p>
+        <div class="email-check-tips" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: left;">
+            <p style="margin: 0; font-size: 14px; color: #666;">
+                <strong><i class="fas fa-lightbulb me-2" style="color: #ffc107;"></i>Mẹo:</strong>
+            </p>
+            <ul style="margin: 10px 0 0 20px; padding: 0; font-size: 14px; color: #666;">
+                <li>Kiểm tra cả thư mục Spam/Junk</li>
+                <li>Email có thể mất vài phút để đến</li>
+                <li>Thêm địa chỉ gửi vào danh bạ để không bị lọc spam</li>
+            </ul>
+        </div>
+    }
+
+    <a asp-page="./Login" class="auth-button" style="text-decoration: none; display: block;">
+        <i class="fas fa-sign-in-alt me-2"></i>Quay lại đăng nhập
+    </a>
+</div>
+
+<style>
+    .auth-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 36px;
+        color: white;
+    }
+</style>

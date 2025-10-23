@@ -1,0 +1,121 @@
+﻿@model QuanLyNhaTro.Models.NguoiThue
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Thông Tin Người Thuê";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+<h4 class="text-muted mb-3">@Model.HoTen</h4>
+<hr />
+
+<div class="form-card">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="AnhChanDung" />
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="HoTen" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input asp-for="HoTen" class="form-control" />
+                </div>
+                <span asp-validation-for="HoTen" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="SoCCCD" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                    <input asp-for="SoCCCD" class="form-control" />
+                </div>
+                <span asp-validation-for="SoCCCD" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="SoDienThoai" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                    <input asp-for="SoDienThoai" class="form-control" />
+                </div>
+                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="QueQuan" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                    <input asp-for="QueQuan" class="form-control" />
+                </div>
+                <span asp-validation-for="QueQuan" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="NoiLamViec" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                <input asp-for="NoiLamViec" class="form-control" />
+            </div>
+            <span asp-validation-for="NoiLamViec" class="text-danger"></span>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.AnhChanDung))
+        {
+            <div class="mb-3">
+                <label class="form-label">Ảnh hiện tại:</label>
+                <div class="border rounded p-2" style="max-width: 200px;">
+                    <img src="@Model.AnhChanDung" alt="Ảnh chân dung" style="max-width: 100%; height: auto; border-radius: 8px;" />
+                </div>
+            </div>
+        }
+
+        <div class="mb-3">
+            <label for="anhChanDung" class="form-label">
+                <i class="fas fa-camera me-2"></i>
+                @(string.IsNullOrEmpty(Model.AnhChanDung) ? "Thêm ảnh chân dung" : "Thay đổi ảnh chân dung")
+            </label>
+            <input type="file" name="anhChanDung" id="anhChanDung" class="form-control" accept="image/*" />
+            <small class="text-muted">Để trống nếu không muốn thay đổi</small>
+        </div>
+
+        <div class="mb-3" id="imagePreview" style="display: none;">
+            <label class="form-label">Xem trước ảnh mới:</label>
+            <div class="border rounded p-2" style="max-width: 200px;">
+                <img id="preview" src="#" alt="Preview" style="max-width: 100%; height: auto; border-radius: 8px;" />
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Lưu thay đổi
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById('anhChanDung').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

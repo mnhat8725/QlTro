@@ -1,0 +1,54 @@
+﻿@model QuanLyNhaTro.Models.Phong
+@using QuanLyNhaTro.Models
+
+@{
+    ViewData["Title"] = "Thêm Mới Phòng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="TenPhong" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-door-open"></i></span>
+                <input asp-for="TenPhong" class="form-control" placeholder="Ví dụ: P101, P202..." />
+            </div>
+            <span asp-validation-for="TenPhong" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LoaiPhongId" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                <select asp-for="LoaiPhongId" class="form-select" asp-items="ViewBag.LoaiPhongId">
+                    <option value="">-- Chọn loại phòng --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="alert alert-info" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            Phòng mới sẽ tự động có trạng thái <strong>"Còn Trống"</strong>.
+            Khi thêm hợp đồng, trạng thái sẽ tự động chuyển sang <strong>"Đã Thuê"</strong>.
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Tạo mới
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,83 @@
+﻿@model QuanLyNhaTro.Models.LoaiPhong
+
+@{
+    ViewData["Title"] = "Xác Nhận Xóa Loại Phòng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Cảnh báo!</h4>
+        <p>Bạn có chắc chắn muốn xóa vĩnh viễn loại phòng này không? Hành động này không thể hoàn tác.</p>
+
+        @if (Model.Phongs.Any())
+        {
+            <hr>
+            <p class="mb-0">
+                <strong><i class="fas fa-times-circle me-1"></i>LƯU Ý:</strong>
+                Loại phòng này đang có <strong class="text-danger">@Model.Phongs.Count phòng</strong> sử dụng.
+                Bạn cần xóa các phòng này trước khi xóa loại phòng!
+            </p>
+        }
+    </div>
+
+    <hr class="my-4" />
+
+    <div>
+        <h4>Thông tin loại phòng sẽ bị xóa:</h4>
+        <dl class="row mt-3">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.TenLoaiPhong)
+            </dt>
+            <dd class="col-sm-8">
+                <strong>@Html.DisplayFor(model => model.TenLoaiPhong)</strong>
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.GiaPhong)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Model.GiaPhong.ToString("N0") đ
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.DienTich)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Model.DienTich m²
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                Số phòng đang sử dụng
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                <span class="badge bg-info">
+                    <i class="fas fa-door-open me-1"></i>
+                    @Model.Phongs.Count phòng
+                </span>
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+
+            @if (!Model.Phongs.Any())
+            {
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash me-2"></i>Xác nhận Xóa
+                </button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-secondary" disabled>
+                    <i class="fas fa-ban me-2"></i>Không thể xóa (Còn phòng đang dùng)
+                </button>
+            }
+
+            <a asp-action="Index" class="btn btn-secondary ms-2">
+                <i class="fas fa-times me-2"></i>Hủy
+            </a>
+        </form>
+    </div>
+</div>

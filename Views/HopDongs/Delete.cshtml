@@ -1,0 +1,88 @@
+﻿@model QuanLyNhaTro.Models.HopDong
+
+@{
+    ViewData["Title"] = "Xác Nhận Xóa Hợp Đồng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Cảnh báo!</h4>
+        <p>Bạn có chắc chắn muốn xóa hợp đồng này không? Hành động này không thể hoàn tác.</p>
+        <hr>
+        <p class="mb-0">
+            <small>
+                <i class="fas fa-info-circle me-1"></i>
+                Lưu ý: Khi xóa hợp đồng, phòng sẽ tự động chuyển về trạng thái "Trống".
+            </small>
+        </p>
+    </div>
+
+    <hr class="my-4" />
+
+    <div>
+        <h4>Thông tin hợp đồng sẽ bị xóa:</h4>
+        <dl class="row mt-3">
+            <dt class="col-sm-4">
+                <i class="fas fa-door-open me-2"></i>
+                Phòng
+            </dt>
+            <dd class="col-sm-8">
+                <strong>@(Model.Phong?.TenPhong ?? "N/A")</strong>
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                <i class="fas fa-user me-2"></i>
+                Người thuê
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                <strong>@(Model.NguoiThue?.HoTen ?? "N/A")</strong>
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                <i class="fas fa-calendar-alt me-2"></i>
+                Ngày bắt đầu
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Model.NgayBatDau.ToString("dd/MM/yyyy")
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                <i class="fas fa-calendar-check me-2"></i>
+                Ngày kết thúc
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @if (Model.NgayKetThuc.HasValue)
+                {
+                    @Model.NgayKetThuc.Value.ToString("dd/MM/yyyy")
+                }
+                else
+                {
+                    <span class="badge bg-info">Chưa xác định</span>
+                }
+            </dd>
+
+            @if (!string.IsNullOrEmpty(Model.AnhHopDongUrl))
+            {
+                <dt class="col-sm-4 mt-3">
+                    <i class="fas fa-file-image me-2"></i>
+                    Ảnh hợp đồng
+                </dt>
+                <dd class="col-sm-8 mt-3">
+                    <img src="@Model.AnhHopDongUrl" alt="Hợp đồng" style="max-width: 200px; height: auto;" class="rounded" />
+                </dd>
+            }
+        </dl>
+
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>Xác nhận Xóa
+            </button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">
+                <i class="fas fa-times me-2"></i>Hủy
+            </a>
+        </form>
+    </div>
+</div>

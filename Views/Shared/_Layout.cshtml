@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Quản Lý Nhà Trọ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <i class="fas fa-home logo-icon"></i>
+                <div class="logo-text">
+                    <span class="logo-main">Nhà Trọ</span>
+                    <span class="logo-highlight">Ngáo Giá</span>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav-menu">
+                <li>
+                    <a asp-controller="Home" asp-action="Index">
+                        <i class="fa-solid fa-gauge icon"></i>
+                        <span>Tổng quan</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="LoaiPhongs" asp-action="Index">
+                        <i class="fa-solid fa-tags icon"></i>
+                        <span>Quản lý Loại Phòng</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Phongs" asp-action="Index">
+                        <i class="fa-solid fa-door-open icon"></i>
+                        <span>Quản lý phòng</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="NguoiThues" asp-action="Index">
+                        <i class="fa-solid fa-users icon"></i>
+                        <span>Quản lý người thuê</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="HopDongs" asp-action="Index">
+                        <i class="fa-solid fa-file-contract icon"></i>
+                        <span>Quản lý hợp đồng</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="Privacy">
+                        <i class="fa-solid fa-hand-sparkles icon"></i>
+                        <span>Dịch vụ & Tiện ích</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <partial name="_LoginPartial" />
+        </div>
+    </aside>
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

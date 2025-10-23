@@ -1,0 +1,95 @@
+﻿@model QuanLyNhaTro.Models.NguoiThue
+
+@{
+    ViewData["Title"] = "Chi Tiết Người Thuê";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="mb-4">
+                <i class="fas fa-user-circle me-2" style="color: #3f51b5;"></i>
+                @Model.HoTen
+            </h3>
+
+            <dl class="row">
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-id-card me-2"></i>
+                    Số CCCD/CMND
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    <strong>@Model.SoCCCD</strong>
+                </dd>
+
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-phone me-2"></i>
+                    Số Điện Thoại
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    <a href="tel:@Model.SoDienThoai" style="text-decoration: none;">
+                        @Model.SoDienThoai
+                    </a>
+                </dd>
+
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>
+                    Quê Quán
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    @if (string.IsNullOrEmpty(Model.QueQuan))
+                    {
+                        <span class="text-muted">Chưa cập nhật</span>
+                    }
+                    else
+                    {
+                        @Model.QueQuan
+                    }
+                </dd>
+
+                <dt class="col-sm-4 mb-3">
+                    <i class="fas fa-briefcase me-2"></i>
+                    Nơi Làm Việc/Học Tập
+                </dt>
+                <dd class="col-sm-8 mb-3">
+                    @if (string.IsNullOrEmpty(Model.NoiLamViec))
+                    {
+                        <span class="text-muted">Chưa cập nhật</span>
+                    }
+                    else
+                    {
+                        @Model.NoiLamViec
+                    }
+                </dd>
+            </dl>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card" style="background-color: #f8f9fa; border: none;">
+                <div class="card-body text-center">
+                    @if (!string.IsNullOrEmpty(Model.AnhChanDung))
+                    {
+                        <img src="@Model.AnhChanDung" alt="@Model.HoTen" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin-bottom: 15px; border: 4px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" />
+                    }
+                    else
+                    {
+                        <i class="fas fa-user-circle" style="font-size: 150px; color: #dee2e6; margin-bottom: 15px;"></i>
+                    }
+                    <p class="mb-2"><small class="text-muted">ID: #@Model.Id</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Chỉnh sửa
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+        </a>
+    </div>
+</div>

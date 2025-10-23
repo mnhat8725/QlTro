@@ -1,0 +1,67 @@
+﻿@model QuanLyNhaTro.Models.Phong
+@using QuanLyNhaTro.Models
+
+@{
+    ViewData["Title"] = "Xác Nhận Xóa Phòng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+
+<div class="form-card">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Cảnh báo!</h4>
+        <p>Bạn có chắc chắn muốn xóa vĩnh viễn phòng này không?</p>
+        <hr>
+        <p class="mb-0"><small><i class="fas fa-info-circle me-1"></i>Lưu ý: Nếu phòng này đang có hợp đồng, hãy xóa hợp đồng trước.</small></p>
+    </div>
+
+    <hr class="my-4" />
+
+    <div>
+        <h4>Thông tin phòng sẽ bị xóa:</h4>
+        <dl class="row mt-3">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.TenPhong)
+            </dt>
+            <dd class="col-sm-8">
+                <i class="fas fa-door-open me-2"></i>
+                <strong>@Html.DisplayFor(model => model.TenPhong)</strong>
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.TinhTrang)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @if (Model.TinhTrang == TinhTrangPhong.Trong)
+                {
+                    <span class="badge bg-success">Còn Trống</span>
+                }
+                else if (Model.TinhTrang == TinhTrangPhong.DaThue)
+                {
+                    <span class="badge bg-danger">Đã Thuê</span>
+                }
+                else
+                {
+                    <span class="badge bg-warning">Đang Sửa Chữa</span>
+                }
+            </dd>
+
+            <dt class="col-sm-4 mt-3">
+                @Html.DisplayNameFor(model => model.LoaiPhongId)
+            </dt>
+            <dd class="col-sm-8 mt-3">
+                @Html.DisplayFor(model => model.LoaiPhong!.TenLoaiPhong)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash me-2"></i>Xác nhận Xóa
+            </button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">
+                <i class="fas fa-times me-2"></i>Hủy
+            </a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,379 @@
+﻿@model QuanLyNhaTro.Controllers.HomeController.DashboardViewModel
+@{
+    ViewData["Title"] = "Trang Tổng Quan";
+}
+
+<h1 class="page-header">Tổng Quan</h1>
+
+<div class="dashboard-card-container">
+    <div class="dashboard-card">
+        <div class="card-icon blue">
+            <i class="fa-solid fa-bed"></i>
+        </div>
+        <div class="card-content">
+            <div class="title">Tổng số phòng</div>
+            <div class="value">@Model.TongSoPhong</div>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-icon green">
+            <i class="fa-solid fa-house-user"></i>
+        </div>
+        <div class="card-content">
+            <div class="title">Phòng đã thuê</div>
+            <div class="value">@Model.PhongDaThue / @Model.TongSoPhong</div>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-icon yellow">
+            <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="card-content">
+            <div class="title">Tổng người thuê</div>
+            <div class="value">@Model.TongNguoiThue</div>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-icon purple">
+            <i class="fa-solid fa-wallet"></i>
+        </div>
+        <div class="card-content">
+            <div class="title">Doanh thu dự kiến</div>
+            <div class="value">@Model.DoanhThuDuKien.ToString("N0") đ</div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6 mb-4">
+        <div class="chart-card">
+            <h3 class="chart-title">
+                <i class="fas fa-chart-pie me-2"></i>
+                Tỷ Lệ Phòng
+            </h3>
+            <div class="chart-container">
+                <canvas id="roomChart"></canvas>
+            </div>
+            <div class="chart-legend mt-3">
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #43a047;"></span>
+                    <span class="legend-text">Đã thuê: <strong>@Model.PhongDaThue phòng</strong></span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background-color: #e0e0e0;"></span>
+                    <span class="legend-text">Còn trống: <strong>@(Model.TongSoPhong - Model.PhongDaThue) phòng</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="stats-card">
+            <h3 class="chart-title">
+                <i class="fas fa-chart-line me-2"></i>
+                Thống Kê Nhanh
+            </h3>
+            <div class="stats-list">
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-percentage me-2"></i>
+                        Tỷ lệ lấp đầy
+                    </div>
+                    <div class="stat-value">
+                        @{
+                            var tyLe = Model.TongSoPhong > 0 ? (Model.PhongDaThue * 100.0 / Model.TongSoPhong) : 0;
+                        }
+                        @tyLe.ToString("F1")%
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: @tyLe%"></div>
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-door-open me-2"></i>
+                        Phòng trống
+                    </div>
+                    <div class="stat-value text-success">
+                        @(Model.TongSoPhong - Model.PhongDaThue) phòng
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-money-bill-wave me-2"></i>
+                        Doanh thu trung bình/phòng
+                    </div>
+                    <div class="stat-value text-primary">
+                        @{
+                            var tbPhong = Model.PhongDaThue > 0 ? Model.DoanhThuDuKien / Model.PhongDaThue : 0;
+                        }
+                        @tbPhong.ToString("N0") đ
+                    </div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-label">
+                        <i class="fas fa-user-friends me-2"></i>
+                        Trung bình người/phòng
+                    </div>
+                    <div class="stat-value text-info">
+                        @{
+                            var tbNguoi = Model.PhongDaThue > 0 ? (Model.TongNguoiThue * 1.0 / Model.PhongDaThue).ToString("F1") : "0";
+                        }
+                        @tbNguoi người
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="quick-actions-section mt-4">
+    <h3 class="section-title">
+        <i class="fas fa-bolt me-2"></i>
+        Thao Tác Nhanh
+    </h3>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/Phongs/Create" class="action-card">
+                <div class="action-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="action-text">Thêm Phòng Mới</div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/NguoiThues/Create" class="action-card">
+                <div class="action-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="action-text">Thêm Người Thuê</div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/HopDongs/Create" class="action-card">
+                <div class="action-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <i class="fas fa-file-contract"></i>
+                </div>
+                <div class="action-text">Tạo Hợp Đồng</div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <a href="/LoaiPhongs" class="action-card">
+                <div class="action-icon" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="action-text">Quản Lý Loại Phòng</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chart-card, .stats-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        height: 100%;
+    }
+
+    .chart-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chart-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+
+    .legend-text {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .stats-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .stat-item {
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .text-success {
+        color: #43a047 !important;
+    }
+
+    .text-primary {
+        color: #3f51b5 !important;
+    }
+
+    .text-info {
+        color: #00bcd4 !important;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        margin-top: 8px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #43a047 0%, #66bb6a 100%);
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+
+    .quick-actions-section {
+        margin-top: 30px;
+    }
+
+    .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .action-card {
+        display: block;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+    .action-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 24px;
+        color: #fff;
+    }
+
+    .action-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .mb-3 {
+        margin-bottom: 1rem;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        const ctx = document.getElementById('roomChart');
+        const phongDaThue = @Model.PhongDaThue;
+        const phongTrong = @Model.TongSoPhong - @Model.PhongDaThue;
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Đã thuê', 'Còn trống'],
+                datasets: [{
+                    data: [phongDaThue, phongTrong],
+                    backgroundColor: [
+                        '#43a047',
+                        '#e0e0e0'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = @Model.TongSoPhong;
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                return label + ': ' + value + ' phòng (' + percentage + '%)';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+}

@@ -1,0 +1,71 @@
+﻿@model QuanLyNhaTro.Models.LoaiPhong
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Loại Phòng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+<h4 class="text-muted mb-3">Loại phòng: @Model.TenLoaiPhong</h4>
+<hr />
+
+<div class="form-card">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="TenLoaiPhong" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                <input asp-for="TenLoaiPhong" class="form-control" />
+            </div>
+            <span asp-validation-for="TenLoaiPhong" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="GiaPhong" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-money-bill-wave"></i></span>
+                    <input asp-for="GiaPhong" class="form-control" />
+                    <span class="input-group-text">đ</span>
+                </div>
+                <span asp-validation-for="GiaPhong" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="DienTich" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-ruler-combined"></i></span>
+                    <input asp-for="DienTich" class="form-control" />
+                    <span class="input-group-text">m²</span>
+                </div>
+                <span asp-validation-for="DienTich" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MoTaNoiThat" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-couch"></i></span>
+                <textarea asp-for="MoTaNoiThat" class="form-control" rows="3"></textarea>
+            </div>
+            <span asp-validation-for="MoTaNoiThat" class="text-danger"></span>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Lưu thay đổi
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,64 @@
+﻿@model QuanLyNhaTro.Models.Phong
+@using QuanLyNhaTro.Models
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Phòng";
+}
+
+<h1 class="page-header">@ViewData["Title"]</h1>
+<h4 class="text-muted mb-3">Phòng: @Model.TenPhong</h4>
+<hr />
+
+<div class="form-card">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="TenPhong" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-door-open"></i></span>
+                <input asp-for="TenPhong" class="form-control" />
+            </div>
+            <span asp-validation-for="TenPhong" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="TinhTrang" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                <select asp-for="TinhTrang" class="form-select" asp-items="Html.GetEnumSelectList<TinhTrangPhong>()"></select>
+            </div>
+            <span asp-validation-for="TinhTrang" class="text-danger"></span>
+            <small class="text-muted">
+                <i class="fas fa-lightbulb me-1"></i>
+                <strong>Lưu ý:</strong> Trạng thái "Đã Thuê" sẽ tự động cập nhật khi thêm hợp đồng.
+                Trạng thái "Trống" sẽ tự động cập nhật khi xóa hợp đồng.
+            </small>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="LoaiPhongId" class="form-label"></label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-tags"></i></span>
+                <select asp-for="LoaiPhongId" class="form-select" asp-items="ViewBag.LoaiPhongId"></select>
+            </div>
+            <span asp-validation-for="LoaiPhongId" class="text-danger"></span>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Lưu thay đổi
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
