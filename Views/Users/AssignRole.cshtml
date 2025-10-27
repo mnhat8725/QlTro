@@ -1,0 +1,110 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using QuanLyNhatro.ViewModels
+@model AssignRoleViewModel
+@{
+    ViewData["Title"] = "Phân Quyền";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-shield me-2"></i>Phân Quyền Người Dùng
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Đang phân quyền cho: <strong>@Model.Email</strong>
+                    </div>
+
+                    <form asp-action="AssignRole" method="post">
+                        <input type="hidden" name="userId" value="@Model.UserId" />
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Chọn quyền:</label>
+
+                            @foreach (var role in Model.AllRoles)
+                            {
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox"
+                                           name="selectedRoles" value="@role"
+                                           id="role_@role"
+                                           @(Model.SelectedRoles.Contains(role) ? "checked" : "") />
+                                    <label class="form-check-label" for="role_@role">
+                                        @if (role == "Admin")
+                                        {
+                                            <i class="fas fa-crown text-warning me-2"></i>
+                                            <span class="fw-bold">@role</span>
+                                            <small class="text-muted">(Quản trị viên - toàn quyền)</small>
+                                        }
+                                        else if (role == "ChuTro")
+                                        {
+                                            <i class="fas fa-building text-primary me-2"></i>
+                                            <span class="fw-bold">@role</span>
+                                            <small class="text-muted">(Chủ trọ - quản lý phòng, hợp đồng)</small>
+                                        }
+                                        else if (role == "NguoiThue")
+                                        {
+                                            <i class="fas fa-user text-success me-2"></i>
+                                            <span class="fw-bold">@role</span>
+                                            <small class="text-muted">(Người thuê - xem thông tin cá nhân)</small>
+                                        }
+                                    </label>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Quay lại
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Lưu Phân Quyền
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Giải thích quyền -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Giải Thích Quyền</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center p-3 border rounded">
+                                <i class="fas fa-crown fa-3x text-warning mb-2"></i>
+                                <h6>Admin</h6>
+                                <small class="text-muted">Toàn quyền quản lý hệ thống</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-3 border rounded">
+                                <i class="fas fa-building fa-3x text-primary mb-2"></i>
+                                <h6>Chủ Trọ</h6>
+                                <small class="text-muted">Quản lý phòng, người thuê, hợp đồng</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center p-3 border rounded">
+                                <i class="fas fa-user fa-3x text-success mb-2"></i>
+                                <h6>Người Thuê</h6>
+                                <small class="text-muted">Xem thông tin cá nhân, hóa đơn</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
