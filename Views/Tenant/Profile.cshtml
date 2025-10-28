@@ -1,0 +1,185 @@
+﻿@model QuanLyNhaTro.Models.NguoiThue
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+    Layout = "~/Views/Shared/_TenantLayout.cshtml";
+    var email = ViewBag.Email as string;
+}
+
+<div class="top-bar">
+    <h1 class="page-title">
+        <i class="fas fa-user me-2"></i>Thông tin cá nhân
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="content-wrapper">
+            <h4 class="mb-4">
+                <i class="fas fa-id-card me-2"></i>Thông tin cơ bản
+            </h4>
+
+            <table class="table table-borderless">
+                <tr>
+                    <td class="text-muted" style="width: 200px;">
+                        <i class="fas fa-user me-2"></i>Họ và tên:
+                    </td>
+                    <td class="fw-bold fs-5">@Model.HoTen</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">
+                        <i class="fas fa-id-card me-2"></i>Số CCCD:
+                    </td>
+                    <td class="fw-bold">@Model.SoCCCD</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">
+                        <i class="fas fa-phone me-2"></i>Số điện thoại:
+                    </td>
+                    <td class="fw-bold">@Model.SoDienThoai</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">
+                        <i class="fas fa-envelope me-2"></i>Email:
+                    </td>
+                    <td class="fw-bold">@email</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">
+                        <i class="fas fa-map-marker-alt me-2"></i>Quê quán:
+                    </td>
+                    <td>@Model.QueQuan</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">
+                        <i class="fas fa-briefcase me-2"></i>Nơi làm việc:
+                    </td>
+                    <td>@Model.NoiLamViec</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-info mt-4">
+                <i class="fas fa-info-circle me-2"></i>
+                Để thay đổi thông tin cá nhân, vui lòng liên hệ chủ trọ hoặc quản trị viên.
+            </div>
+        </div>
+
+        <!-- BẢO MẬT TÀI KHOẢN -->
+        <div class="content-wrapper mt-4">
+            <h4 class="mb-4">
+                <i class="fas fa-lock me-2"></i>Bảo mật tài khoản
+            </h4>
+
+            <div class="list-group">
+                <a href="/Identity/Account/Manage/ChangePassword" class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-key text-primary me-2"></i>
+                            <strong>Đổi mật khẩu</strong>
+                            <p class="mb-0 text-muted small">Thay đổi mật khẩu đăng nhập</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted"></i>
+                    </div>
+                </a>
+
+                <a href="/Identity/Account/Manage/TwoFactorAuthentication" class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-shield-alt text-success me-2"></i>
+                            <strong>Xác thực 2 yếu tố</strong>
+                            <p class="mb-0 text-muted small">Tăng cường bảo mật tài khoản</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted"></i>
+                    </div>
+                </a>
+
+                <a href="/Identity/Account/Manage/PersonalData" class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-download text-info me-2"></i>
+                            <strong>Dữ liệu cá nhân</strong>
+                            <p class="mb-0 text-muted small">Tải xuống hoặc xóa dữ liệu</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR: ẢNH ĐẠI DIỆN -->
+    <div class="col-lg-4">
+        <div class="content-wrapper text-center">
+            <h5 class="mb-4">
+                <i class="fas fa-camera me-2"></i>Ảnh đại diện
+            </h5>
+
+            @if (!string.IsNullOrEmpty(Model.AnhChanDung))
+            {
+                <img src="@Model.AnhChanDung" alt="Avatar" class="img-fluid rounded-circle mb-3" style="width: 200px; height: 200px; object-fit: cover;">
+            }
+            else
+            {
+                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                     style="width: 200px; height: 200px; font-size: 80px; font-weight: bold;">
+                    @Model.HoTen.Substring(0, 1).ToUpper()
+                </div>
+            }
+
+            <p class="text-muted small">Ảnh chân dung từ hồ sơ thuê trọ</p>
+
+            <button class="btn btn-outline-primary btn-sm" disabled>
+                <i class="fas fa-camera me-2"></i>Thay đổi ảnh
+            </button>
+            <p class="text-muted small mt-2">
+                Liên hệ quản trị viên để cập nhật
+            </p>
+        </div>
+
+        <!-- THÔNG TIN THÊM -->
+        <div class="content-wrapper mt-3">
+            <h6 class="mb-3">
+                <i class="fas fa-info-circle me-2"></i>Thông tin tài khoản
+            </h6>
+
+            <table class="table table-sm table-borderless">
+                <tr>
+                    <td class="text-muted">Vai trò:</td>
+                    <td>
+                        <span class="badge bg-info">Người Thuê</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Trạng thái:</td>
+                    <td>
+                        <span class="badge bg-success">Đang hoạt động</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Email xác thực:</td>
+                    <td>
+                        <i class="fas fa-check-circle text-success"></i>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- LIÊN KẾT NHANH -->
+        <div class="content-wrapper mt-3">
+            <h6 class="mb-3">
+                <i class="fas fa-link me-2"></i>Liên kết nhanh
+            </h6>
+
+            <div class="d-grid gap-2">
+                <a asp-action="MyRoom" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-door-open me-2"></i>Phòng của tôi
+                </a>
+                <a asp-action="MyBills" class="btn btn-outline-success btn-sm">
+                    <i class="fas fa-file-invoice-dollar me-2"></i>Hóa đơn
+                </a>
+                <a asp-action="PaymentHistory" class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-history me-2"></i>Lịch sử thanh toán
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

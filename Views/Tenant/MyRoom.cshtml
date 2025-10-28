@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Phòng của tôi";
     Layout = "~/Views/Shared/_TenantLayout.cshtml";
-    
+
     var hopDong = ViewBag.HopDong as QuanLyNhaTro.Models.HopDong;
     var nguoiThue = ViewBag.NguoiThue as QuanLyNhaTro.Models.NguoiThue;
 }
@@ -124,9 +124,7 @@
                         <td class="fw-bold">@hopDong.NgayKetThuc.Value.ToString("dd/MM/yyyy")</td>
                     </tr>
 
-                    
-                        var soNgayConLai = (hopDong.NgayKetThuc.Value - DateTime.Now).Days;
-                    
+                    var soNgayConLai = (hopDong.NgayKetThuc.Value - DateTime.Now).Days;
 
                     <tr>
                         <td class="text-muted">
@@ -180,7 +178,7 @@
             </h5>
 
             <div class="text-center mb-3">
-                <div class="avatar-placeholder bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                <div class="avatar-placeholder bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center"
                      style="width: 80px; height: 80px; font-size: 32px;">
                     <i class="fas fa-user"></i>
                 </div>

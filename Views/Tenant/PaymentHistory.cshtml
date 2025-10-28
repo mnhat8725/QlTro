@@ -1,0 +1,276 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<QuanLyNhaTro.Models.HoaDon>
+@{
+    ViewData["Title"] = "Lịch sử thanh toán";
+    Layout = "~/Views/Shared/_TenantLayout.cshtml";
+
+    var hopDong = ViewBag.HopDong as QuanLyNhaTro.Models.HopDong;
+    var tongDaThanhToan = ViewBag.TongDaThanhToan as decimal?;
+    var tongChuaThanhToan = ViewBag.TongChuaThanhToan as decimal?;
+    var trungBinhThang = ViewBag.TrungBinhThang as decimal?;
+}
+
+<div class="top-bar">
+    <h1 class="page-title">
+        <i class="fas fa-history me-2"></i>Lịch sử thanh toán
+    </h1>
+    <span class="badge bg-primary">Phòng: @hopDong?.Phong?.TenPhong</span>
+</div>
+
+<!-- THỐNG KÊ TỔNG QUAN -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 bg-success text-white">
+            <div class="card-body">
+                <h6 class="opacity-75">
+                    <i class="fas fa-check-circle me-2"></i>Đã thanh toán
+                </h6>
+                <h3 class="mb-0">@((tongDaThanhToan ?? 0).ToString("N0"))đ</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 bg-warning text-white">
+            <div class="card-body">
+                <h6 class="opacity-75">
+                    <i class="fas fa-clock me-2"></i>Chưa thanh toán
+                </h6>
+                <h3 class="mb-0">@((tongChuaThanhToan ?? 0).ToString("N0"))đ</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 bg-info text-white">
+            <div class="card-body">
+                <h6 class="opacity-75">
+                    <i class="fas fa-calculator me-2"></i>Trung bình/tháng
+                </h6>
+                <h3 class="mb-0">@((trungBinhThang ?? 0).ToString("N0"))đ</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="content-wrapper text-center py-5">
+        <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+        <h4 class="text-muted">Chưa có lịch sử thanh toán</h4>
+    </div>
+}
+else
+{
+    <!-- BẢNG LỊCH SỬ -->
+    <div class="content-wrapper">
+        <h4 class="mb-4">
+            <i class="fas fa-list me-2"></i>Danh sách giao dịch
+        </h4>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tháng/Năm</th>
+                        <th class="text-center">Tiền phòng</th>
+                        <th class="text-center">Điện</th>
+                        <th class="text-center">Nước</th>
+                        <th class="text-center">Dịch vụ</th>
+                        <th class="text-end">Tổng tiền</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Ngày TT</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hoaDon in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">
+                                <i class="far fa-calendar me-2"></i>
+                                @hoaDon.ThangNam.ToString("MM/yyyy")
+                            </td>
+                            <td class="text-center">@hoaDon.TienPhong.ToString("N0")đ</td>
+                            <td class="text-center">
+                                <small class="text-muted">@hoaDon.SoDienTieuThu kWh</small><br>
+                                @hoaDon.TienDien.ToString("N0")đ
+                            </td>
+                            <td class="text-center">
+                                <small class="text-muted">@hoaDon.SoNuocTieuThu m³</small><br>
+                                @hoaDon.TienNuoc.ToString("N0")đ
+                            </td>
+                            <td class="text-center">@((hoaDon.TienDichVuKhac ?? 0).ToString("N0"))đ</td>
+                            <td class="text-end fw-bold text-danger">
+                                @hoaDon.TongTien.ToString("N0")đ
+                            </td>
+                            <td class="text-center">
+                                @if (hoaDon.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.DaThanhToan)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Đã TT
+                                    </span>
+                                }
+                                else if (hoaDon.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.QuaHan)
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-exclamation-triangle me-1"></i>Quá hạn
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-clock me-1"></i>Chưa TT
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (hoaDon.NgayThanhToan.HasValue)
+                                {
+                                    <small>@hoaDon.NgayThanhToan.Value.ToString("dd/MM/yyyy")</small>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="BillDetails" asp-route-id="@hoaDon.Id" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="table-light">
+                    <tr class="fw-bold">
+                        <td colspan="5" class="text-end">TỔNG CỘNG:</td>
+                        <td class="text-end text-primary fs-5">
+                            @Model.Sum(h => h.TongTien).ToString("N0")đ
+                        </td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- BIỂU ĐỒ -->
+    <div class="content-wrapper mt-4">
+        <h4 class="mb-4">
+            <i class="fas fa-chart-line me-2"></i>Biểu đồ tiêu thụ
+        </h4>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h6 class="text-muted mb-3">Tiêu thụ điện (6 tháng gần nhất)</h6>
+                <canvas id="chartDien"></canvas>
+            </div>
+            <div class="col-md-6 mb-4">
+                <h6 class="text-muted mb-3">Tiêu thụ nước (6 tháng gần nhất)</h6>
+                <canvas id="chartNuoc"></canvas>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h6 class="text-muted mb-3">Tổng chi phí theo tháng</h6>
+            <canvas id="chartTongTien"></canvas>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        // Lấy data từ Model (6 tháng gần nhất)
+        var hoaDons = @Html.Raw(Json.Serialize(Model.Take(6).Reverse()));
+
+        // Chuẩn bị data
+        var labels = hoaDons.map(h => {
+            var date = new Date(h.thangNam);
+            return (date.getMonth() + 1) + '/' + date.getFullYear();
+        });
+
+        var dataDien = hoaDons.map(h => h.soDienTieuThu);
+        var dataNuoc = hoaDons.map(h => h.soNuocTieuThu);
+        var dataTongTien = hoaDons.map(h => h.tongTien);
+
+        // Biểu đồ Điện
+        new Chart(document.getElementById('chartDien'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'kWh',
+                    data: dataDien,
+                    backgroundColor: 'rgba(255, 193, 7, 0.5)',
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Biểu đồ Nước
+        new Chart(document.getElementById('chartNuoc'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'm³',
+                    data: dataNuoc,
+                    backgroundColor: 'rgba(23, 162, 184, 0.5)',
+                    borderColor: 'rgba(23, 162, 184, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Biểu đồ Tổng tiền
+        new Chart(document.getElementById('chartTongTien'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Tổng tiền (đồng)',
+                    data: dataTongTien,
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+}

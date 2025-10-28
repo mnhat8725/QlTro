@@ -20,6 +20,16 @@ namespace QuanLyNhaTro.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                // Nếu user CHỈ có role NguoiThue (không có Admin/ChuTro)
+                if (User.IsInRole("NguoiThue") &&
+                    !User.IsInRole("Admin") &&
+                    !User.IsInRole("ChuTro"))
+                {
+                    return RedirectToAction("Index", "Tenant");
+                }
+            }
             var viewModel = new DashboardViewModel
             {
                 TongSoPhong = await _context.Phongs.CountAsync(),

@@ -23,7 +23,7 @@
                         <i class="fas fa-info-circle me-2"></i>
                         Đang phân quyền cho: <strong>@Model.Email</strong>
                     </div>
-
+                    
                     <form asp-action="AssignRole" method="post">
                         <input type="hidden" name="userId" value="@Model.UserId" />
                         @Html.AntiForgeryToken()

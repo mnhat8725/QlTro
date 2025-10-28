@@ -253,7 +253,7 @@ namespace QuanLyNhatro.Migrations
 
                     b.HasIndex("PhongId");
 
-                    b.ToTable("HopDongs");
+                    b.ToTable("HopDongs", (string)null);
                 });
 
             modelBuilder.Entity("QuanLyNhaTro.Models.LoaiPhong", b =>
@@ -280,7 +280,7 @@ namespace QuanLyNhatro.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LoaiPhongs");
+                    b.ToTable("LoaiPhongs", (string)null);
                 });
 
             modelBuilder.Entity("QuanLyNhaTro.Models.NguoiThue", b =>
@@ -290,9 +290,6 @@ namespace QuanLyNhatro.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AnhChanDung")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HoTen")
                         .IsRequired()
@@ -319,7 +316,7 @@ namespace QuanLyNhatro.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NguoiThues");
+                    b.ToTable("NguoiThues", (string)null);
                 });
 
             modelBuilder.Entity("QuanLyNhaTro.Models.Phong", b =>
@@ -345,7 +342,7 @@ namespace QuanLyNhatro.Migrations
 
                     b.HasIndex("LoaiPhongId");
 
-                    b.ToTable("Phongs");
+                    b.ToTable("Phongs", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
