@@ -1,0 +1,125 @@
+﻿@model IEnumerable<QuanLyNhaTro.Models.HoaDon>
+@{
+    ViewData["Title"] = "Hóa đơn của tôi";
+    Layout = "~/Views/Shared/_TenantLayout.cshtml";
+
+    var hopDong = ViewBag.HopDong as QuanLyNhaTro.Models.HopDong;
+}
+
+<div class="top-bar">
+    <h1 class="page-title">
+        <i class="fas fa-file-invoice-dollar me-2"></i>Hóa đơn của tôi
+    </h1>
+    <div>
+        <span class="badge bg-primary">Phòng: @hopDong?.Phong?.TenPhong</span>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="content-wrapper text-center py-5">
+        <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+        <h4 class="text-muted">Chưa có hóa đơn nào</h4>
+        <p class="text-muted">Hóa đơn sẽ được tạo vào đầu mỗi tháng</p>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var hoaDon in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100" style="border-left: 4px solid @(hoaDon.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.DaThanhToan ? "#28a745" : "#ffc107");">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="far fa-calendar me-2"></i>
+                                Tháng @hoaDon.ThangNam.ToString("MM/yyyy")
+                            </h5>
+                            @if (hoaDon.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.DaThanhToan)
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i>Đã thanh toán
+                                </span>
+                            }
+                            else if (hoaDon.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.QuaHan)
+                            {
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>Quá hạn
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-clock me-1"></i>Chưa thanh toán
+                                </span>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-borderless mb-3">
+                            <tr>
+                                <td class="text-muted">
+                                    <i class="fas fa-home me-2"></i>Tiền phòng:
+                                </td>
+                                <td class="text-end fw-bold">@hoaDon.TienPhong.ToString("N0")đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">
+                                    <i class="fas fa-bolt me-2"></i>Điện
+                                    <small>(@hoaDon.SoDienTieuThu kWh)</small>:
+                                </td>
+                                <td class="text-end">@hoaDon.TienDien.ToString("N0")đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">
+                                    <i class="fas fa-tint me-2"></i>Nước
+                                    <small>(@hoaDon.SoNuocTieuThu m³)</small>:
+                                </td>
+                                <td class="text-end">@hoaDon.TienNuoc.ToString("N0")đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">
+                                    <i class="fas fa-wifi me-2"></i>Dịch vụ:
+                                </td>
+                                <td class="text-end">@((hoaDon.TienDichVuKhac ?? 0).ToString("N0"))đ</td>
+                            </tr>
+                            <tr class="border-top">
+                                <td class="fw-bold text-primary">TỔNG:</td>
+                                <td class="text-end fw-bold text-danger fs-5">@hoaDon.TongTien.ToString("N0")đ</td>
+                            </tr>
+                        </table>
+
+                        @if (hoaDon.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.DaThanhToan)
+                        {
+                            <div class="alert alert-success py-2 mb-3">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Đã thanh toán ngày @hoaDon.NgayThanhToan?.ToString("dd/MM/yyyy")
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning py-2 mb-3">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Vui lòng thanh toán trước ngày 05
+                            </div>
+                        }
+
+                        <div class="d-flex gap-2">
+                            <a asp-action="BillDetails" asp-route-id="@hoaDon.Id" class="btn btn-sm btn-primary flex-fill">
+                                <i class="fas fa-eye me-1"></i>Chi tiết
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-print me-1"></i>In
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light text-muted small">
+                        <i class="far fa-clock me-1"></i>
+                        Tạo ngày: @hoaDon.NgayTao.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

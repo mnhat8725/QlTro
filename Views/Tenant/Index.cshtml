@@ -1,0 +1,225 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+    Layout = "~/Views/Shared/_TenantLayout.cshtml";
+
+    var nguoiThue = ViewBag.NguoiThue as QuanLyNhaTro.Models.NguoiThue;
+    var hopDong = ViewBag.HopDong as QuanLyNhaTro.Models.HopDong;
+    var soHoaDonChuaTT = ViewBag.SoHoaDonChuaTT as int?;
+    var hoaDonMoiNhat = ViewBag.HoaDonMoiNhat as QuanLyNhaTro.Models.HoaDon;
+    var soNgayConLai = ViewBag.SoNgayConLai as int?;
+}
+
+<div class="top-bar">
+    <h1 class="page-title">
+        <i class="fas fa-tachometer-alt me-2"></i>Trang chủ
+    </h1>
+    <div class="text-muted">
+        <i class="far fa-clock me-1"></i>
+        @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+    </div>
+</div>
+
+<!-- THỐNG KÊ NHANH -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <i class="fas fa-door-open" style="font-size: 32px; opacity: 0.8; margin-bottom: 10px;"></i>
+            <h3>@hopDong?.Phong?.TenPhong</h3>
+            <p>Phòng đang thuê</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <i class="fas fa-money-bill-wave" style="font-size: 32px; opacity: 0.8; margin-bottom: 10px;"></i>
+            <h3>@(hopDong?.Phong?.LoaiPhong?.GiaPhong.ToString("N0"))đ</h3>
+            <p>Giá phòng/tháng</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <i class="fas fa-file-invoice" style="font-size: 32px; opacity: 0.8; margin-bottom: 10px;"></i>
+            <h3>@(soHoaDonChuaTT ?? 0)</h3>
+            <p>Hóa đơn chưa thanh toán</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+            <i class="fas fa-calendar-check" style="font-size: 32px; opacity: 0.8; margin-bottom: 10px;"></i>
+            <h3>@(soNgayConLai.HasValue? soNgayConLai + " ngày" : "Vô thời hạn")</h3>
+            <p>Hợp đồng còn lại</p>
+        </div>
+    </div>
+</div>
+
+<!-- THÔNG BÁO -->
+@if (soHoaDonChuaTT > 0)
+{
+    <div class="alert-custom alert-warning-custom">
+        <h5><i class="fas fa-exclamation-triangle me-2"></i>Thông báo</h5>
+        <p class="mb-0">
+            Bạn có <strong>@soHoaDonChuaTT hóa đơn</strong> chưa thanh toán.
+            Vui lòng thanh toán trước hạn để tránh phát sinh phí.
+        </p>
+    </div>
+}
+
+<div class="row">
+    <!-- HÓA ĐƠN MỚI NHẤT -->
+    <div class="col-md-8">
+        <div class="content-wrapper">
+            <h4 class="mb-4">
+                <i class="fas fa-file-invoice-dollar me-2"></i>
+                Hóa đơn mới nhất
+            </h4>
+
+            @if (hoaDonMoiNhat != null)
+            {
+                <div class="card" style="border-left: 4px solid #667eea;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">
+                                <i class="far fa-calendar me-2"></i>
+                                Tháng @hoaDonMoiNhat.ThangNam.ToString("MM/yyyy")
+                            </h5>
+                            @if (hoaDonMoiNhat.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.ChuaThanhToan)
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-clock me-1"></i>Chưa thanh toán
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>Đã thanh toán
+                                </span>
+                            }
+                        </div>
+
+                        <table class="table table-borderless mb-3">
+                            <tr>
+                                <td class="text-muted">Tiền phòng:</td>
+                                <td class="text-end fw-bold">@hoaDonMoiNhat.TienPhong.ToString("N0")đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">
+                                    Tiền điện
+                                    <small class="text-muted">(@hoaDonMoiNhat.SoDienTieuThu kWh)</small>:
+                                </td>
+                                <td class="text-end fw-bold">@hoaDonMoiNhat.TienDien.ToString("N0")đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">
+                                    Tiền nước
+                                    <small class="text-muted">(@hoaDonMoiNhat.SoNuocTieuThu m³)</small>:
+                                </td>
+                                <td class="text-end fw-bold">@hoaDonMoiNhat.TienNuoc.ToString("N0")đ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Dịch vụ khác:</td>
+                                <td class="text-end fw-bold">@((hoaDonMoiNhat.TienDichVuKhac ?? 0).ToString("N0"))đ</td>
+                            </tr>
+                            <tr class="border-top">
+                                <td class="fw-bold text-primary fs-5">TỔNG CỘNG:</td>
+                                <td class="text-end fw-bold text-danger fs-4">@hoaDonMoiNhat.TongTien.ToString("N0")đ</td>
+                            </tr>
+                        </table>
+
+                        <div class="d-flex gap-2">
+                            <a asp-action="BillDetails" asp-route-id="@hoaDonMoiNhat.Id" class="btn btn-primary">
+                                <i class="fas fa-eye me-2"></i>Xem chi tiết
+                            </a>
+                            @if (hoaDonMoiNhat.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.ChuaThanhToan)
+                            {
+                                <button class="btn btn-success">
+                                    <i class="fas fa-credit-card me-2"></i>Thanh toán ngay
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Chưa có hóa đơn nào được tạo.
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- THÔNG TIN PHÒNG -->
+    <div class="col-md-4">
+        <div class="content-wrapper">
+            <h4 class="mb-4">
+                <i class="fas fa-door-open me-2"></i>
+                Thông tin phòng
+            </h4>
+
+            <div class="mb-3">
+                <label class="text-muted small">Phòng:</label>
+                <div class="fw-bold fs-5">@hopDong?.Phong?.TenPhong</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-muted small">Loại phòng:</label>
+                <div class="fw-bold">@hopDong?.Phong?.LoaiPhong?.TenLoaiPhong</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-muted small">Diện tích:</label>
+                <div class="fw-bold">@hopDong?.Phong?.LoaiPhong?.DienTich m²</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="text-muted small">Giá thuê:</label>
+                <div class="fw-bold text-danger">@hopDong?.Phong?.LoaiPhong?.GiaPhong.ToString("N0")đ/tháng</div>
+            </div>
+
+            <hr>
+
+            <div class="mb-3">
+                <label class="text-muted small">Ngày bắt đầu:</label>
+                <div class="fw-bold">@hopDong?.NgayBatDau.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            @if (hopDong?.NgayKetThuc.HasValue == true)
+            {
+                <div class="mb-3">
+                    <label class="text-muted small">Ngày kết thúc:</label>
+                    <div class="fw-bold">@hopDong.NgayKetThuc.Value.ToString("dd/MM/yyyy")</div>
+                </div>
+
+                @if (soNgayConLai.HasValue)
+                {
+                    <div class="alert alert-info-custom p-2">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Còn <strong>@soNgayConLai ngày</strong> hết hạn
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info-custom p-2">
+                    <i class="fas fa-infinity me-2"></i>
+                    Hợp đồng vô thời hạn
+                </div>
+            }
+
+            <div class="d-grid mt-3">
+                <a asp-action="MyRoom" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-right me-2"></i>Xem chi tiết phòng
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto refresh sau 5 phút
+        setTimeout(function() {
+            location.reload();
+        }, 300000);
+    </script>
+}

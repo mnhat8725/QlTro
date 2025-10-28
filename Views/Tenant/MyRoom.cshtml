@@ -1,0 +1,294 @@
+﻿@{
+    ViewData["Title"] = "Phòng của tôi";
+    Layout = "~/Views/Shared/_TenantLayout.cshtml";
+    
+    var hopDong = ViewBag.HopDong as QuanLyNhaTro.Models.HopDong;
+    var nguoiThue = ViewBag.NguoiThue as QuanLyNhaTro.Models.NguoiThue;
+}
+
+<div class="top-bar">
+    <h1 class="page-title">
+        <i class="fas fa-door-open me-2"></i>Phòng của tôi
+    </h1>
+    <span class="badge bg-success">Đang thuê</span>
+</div>
+
+<div class="row">
+    <!-- THÔNG TIN PHÒNG -->
+    <div class="col-lg-8">
+        <div class="content-wrapper">
+            <h4 class="mb-4">
+                <i class="fas fa-info-circle me-2"></i>Thông tin phòng
+            </h4>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-door-closed me-2"></i>Phòng
+                            </h6>
+                            <h2 class="mb-0 text-primary">@hopDong?.Phong?.TenPhong</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-tag me-2"></i>Loại phòng
+                            </h6>
+                            <h4 class="mb-0">@hopDong?.Phong?.LoaiPhong?.TenLoaiPhong</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-ruler-combined me-2"></i>Diện tích
+                            </h6>
+                            <h4 class="mb-0">@hopDong?.Phong?.LoaiPhong?.DienTich m²</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-money-bill-wave me-2"></i>Giá thuê
+                            </h6>
+                            <h4 class="mb-0 text-danger">
+                                @hopDong?.Phong?.LoaiPhong?.GiaPhong.ToString("N0")đ<small class="text-muted">/tháng</small>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h5 class="mb-3">
+                <i class="fas fa-couch me-2"></i>Nội thất phòng
+            </h5>
+
+            @if (!string.IsNullOrEmpty(hopDong?.Phong?.LoaiPhong?.MoTaNoiThat))
+            {
+                <div class="alert alert-info">
+                    @hopDong.Phong.LoaiPhong.MoTaNoiThat
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Giường ngủ</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Tủ quần áo</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Bàn ghế học tập</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Máy lạnh</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Bình nóng lạnh</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Wifi miễn phí</li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- HỢP ĐỒNG -->
+        <div class="content-wrapper mt-4">
+            <h4 class="mb-4">
+                <i class="fas fa-file-contract me-2"></i>Thông tin hợp đồng
+            </h4>
+
+            <table class="table">
+                <tr>
+                    <td class="text-muted">
+                        <i class="far fa-calendar me-2"></i>Ngày bắt đầu:
+                    </td>
+                    <td class="fw-bold">@hopDong?.NgayBatDau.ToString("dd/MM/yyyy")</td>
+                </tr>
+                @if (hopDong?.NgayKetThuc.HasValue == true)
+                {
+                    <tr>
+                        <td class="text-muted">
+                            <i class="far fa-calendar-times me-2"></i>Ngày kết thúc:
+                        </td>
+                        <td class="fw-bold">@hopDong.NgayKetThuc.Value.ToString("dd/MM/yyyy")</td>
+                    </tr>
+
+                    
+                        var soNgayConLai = (hopDong.NgayKetThuc.Value - DateTime.Now).Days;
+                    
+
+                    <tr>
+                        <td class="text-muted">
+                            <i class="fas fa-hourglass-half me-2"></i>Còn lại:
+                        </td>
+                        <td>
+                            @if (soNgayConLai > 30)
+                            {
+                                <span class="badge bg-success">@soNgayConLai ngày</span>
+                            }
+                            else if (soNgayConLai > 0)
+                            {
+                                <span class="badge bg-warning text-dark">@soNgayConLai ngày (sắp hết hạn)</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Đã hết hạn</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td class="text-muted">
+                            <i class="fas fa-infinity me-2"></i>Thời hạn:
+                        </td>
+                        <td>
+                            <span class="badge bg-info">Vô thời hạn</span>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+            @if (!string.IsNullOrEmpty(hopDong?.AnhHopDongUrl))
+            {
+                <div class="mt-3">
+                    <a href="@hopDong.AnhHopDongUrl" target="_blank" class="btn btn-outline-primary">
+                        <i class="fas fa-file-pdf me-2"></i>Xem hợp đồng
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- SIDEBAR: LIÊN HỆ -->
+    <div class="col-lg-4">
+        <div class="content-wrapper">
+            <h5 class="mb-3">
+                <i class="fas fa-user-tie me-2"></i>Liên hệ chủ trọ
+            </h5>
+
+            <div class="text-center mb-3">
+                <div class="avatar-placeholder bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                     style="width: 80px; height: 80px; font-size: 32px;">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+
+            <table class="table table-sm table-borderless">
+                <tr>
+                    <td class="text-muted">Tên:</td>
+                    <td class="fw-bold">Chủ trọ ABC</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">SĐT:</td>
+                    <td>
+                        <a href="tel:0912345679" class="text-decoration-none">
+                            <i class="fas fa-phone me-1"></i>0912345679
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Email:</td>
+                    <td>
+                        <a href="mailto:chutro@nhatro.com" class="text-decoration-none">
+                            <i class="fas fa-envelope me-1"></i>chutro@nhatro.com
+                        </a>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="d-grid gap-2 mt-3">
+                <a href="tel:0912345679" class="btn btn-success">
+                    <i class="fas fa-phone me-2"></i>Gọi điện
+                </a>
+                <a href="mailto:chutro@nhatro.com" class="btn btn-outline-primary">
+                    <i class="fas fa-envelope me-2"></i>Gửi email
+                </a>
+            </div>
+        </div>
+
+        <!-- QUY ĐỊNH -->
+        <div class="content-wrapper mt-3">
+            <h5 class="mb-3">
+                <i class="fas fa-clipboard-list me-2"></i>Quy định chung
+            </h5>
+
+            <ul class="list-unstyled small">
+                <li class="mb-2">
+                    <i class="fas fa-check text-success me-2"></i>
+                    Thanh toán tiền phòng trước ngày 5 hàng tháng
+                </li>
+                <li class="mb-2">
+                    <i class="fas fa-check text-success me-2"></i>
+                    Giữ gìn vệ sinh chung
+                </li>
+                <li class="mb-2">
+                    <i class="fas fa-check text-success me-2"></i>
+                    Không gây ồn sau 22h
+                </li>
+                <li class="mb-2">
+                    <i class="fas fa-times text-danger me-2"></i>
+                    Không nấu ăn trong phòng
+                </li>
+                <li class="mb-2">
+                    <i class="fas fa-times text-danger me-2"></i>
+                    Không nuôi thú cưng
+                </li>
+            </ul>
+        </div>
+
+        <!-- TIỆN ÍCH -->
+        <div class="content-wrapper mt-3">
+            <h5 class="mb-3">
+                <i class="fas fa-concierge-bell me-2"></i>Tiện ích
+            </h5>
+
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="card text-center border-0 bg-light">
+                        <div class="card-body py-3">
+                            <i class="fas fa-wifi fa-2x text-primary mb-2"></i>
+                            <p class="mb-0 small">Wifi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card text-center border-0 bg-light">
+                        <div class="card-body py-3">
+                            <i class="fas fa-parking fa-2x text-success mb-2"></i>
+                            <p class="mb-0 small">Bãi xe</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card text-center border-0 bg-light">
+                        <div class="card-body py-3">
+                            <i class="fas fa-shield-alt fa-2x text-warning mb-2"></i>
+                            <p class="mb-0 small">An ninh</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card text-center border-0 bg-light">
+                        <div class="card-body py-3">
+                            <i class="fas fa-broom fa-2x text-info mb-2"></i>
+                            <p class="mb-0 small">Vệ sinh</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

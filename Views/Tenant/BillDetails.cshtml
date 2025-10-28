@@ -1,0 +1,292 @@
+﻿@model QuanLyNhaTro.Models.HoaDon
+@{
+    ViewData["Title"] = "Chi tiết hóa đơn";
+    Layout = "~/Views/Shared/_TenantLayout.cshtml";
+}
+
+<div class="top-bar">
+    <h1 class="page-title">
+        <i class="fas fa-file-invoice me-2"></i>Chi tiết hóa đơn
+    </h1>
+    <a asp-action="MyBills" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Quay lại
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="content-wrapper">
+            <!-- HEADER HÓA ĐƠN -->
+            <div class="text-center mb-4 pb-4 border-bottom">
+                <h2 class="mb-1">HÓA ĐƠN TIỀN PHÒNG</h2>
+                <h4 class="text-primary">Tháng @Model.ThangNam.ToString("MM/yyyy")</h4>
+                @if (Model.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.DaThanhToan)
+                {
+                    <span class="badge bg-success fs-6 mt-2">
+                        <i class="fas fa-check-circle me-1"></i>ĐÃ THANH TOÁN
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-warning text-dark fs-6 mt-2">
+                        <i class="fas fa-clock me-1"></i>CHƯA THANH TOÁN
+                    </span>
+                }
+            </div>
+
+            <!-- THÔNG TIN CHUNG -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5><i class="fas fa-user me-2"></i>Thông tin người thuê</h5>
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td class="text-muted">Họ tên:</td>
+                            <td class="fw-bold">@Model.HopDong?.NguoiThue?.HoTen</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Số CCCD:</td>
+                            <td>@Model.HopDong?.NguoiThue?.SoCCCD</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Số điện thoại:</td>
+                            <td>@Model.HopDong?.NguoiThue?.SoDienThoai</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h5><i class="fas fa-door-open me-2"></i>Thông tin phòng</h5>
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td class="text-muted">Phòng:</td>
+                            <td class="fw-bold">@Model.HopDong?.Phong?.TenPhong</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Loại phòng:</td>
+                            <td>@Model.HopDong?.Phong?.LoaiPhong?.TenLoaiPhong</td>
+                        </tr>
+                        <tr>
+                            <td class="text-muted">Diện tích:</td>
+                            <td>@Model.HopDong?.Phong?.LoaiPhong?.DienTich m²</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- CHI TIẾT TÍNH TIỀN -->
+            <h5 class="mb-3"><i class="fas fa-calculator me-2"></i>Chi tiết tính tiền</h5>
+
+            <table class="table table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Khoản mục</th>
+                        <th class="text-center">Chi tiết</th>
+                        <th class="text-end">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- TIỀN PHÒNG -->
+                    <tr>
+                        <td>
+                            <i class="fas fa-home text-primary me-2"></i>
+                            <strong>Tiền phòng</strong>
+                        </td>
+                        <td class="text-center">1 tháng</td>
+                        <td class="text-end fw-bold">@Model.TienPhong.ToString("N0")đ</td>
+                    </tr>
+
+                    <!-- TIỀN ĐIỆN -->
+                    <tr>
+                        <td>
+                            <i class="fas fa-bolt text-warning me-2"></i>
+                            <strong>Tiền điện</strong>
+                        </td>
+                        <td class="text-center">
+                            <div>Chỉ số cũ: <strong>@Model.ChiSoDienCu</strong></div>
+                            <div>Chỉ số mới: <strong>@Model.ChiSoDienMoi</strong></div>
+                            <div class="text-primary">Tiêu thụ: <strong>@Model.SoDienTieuThu kWh</strong></div>
+                            <div class="text-muted small">@Model.DonGiaDien.ToString("N0")đ/kWh</div>
+                        </td>
+                        <td class="text-end fw-bold">@Model.TienDien.ToString("N0")đ</td>
+                    </tr>
+
+                    <!-- TIỀN NƯỚC -->
+                    <tr>
+                        <td>
+                            <i class="fas fa-tint text-info me-2"></i>
+                            <strong>Tiền nước</strong>
+                        </td>
+                        <td class="text-center">
+                            <div>Chỉ số cũ: <strong>@Model.ChiSoNuocCu</strong></div>
+                            <div>Chỉ số mới: <strong>@Model.ChiSoNuocMoi</strong></div>
+                            <div class="text-primary">Tiêu thụ: <strong>@Model.SoNuocTieuThu m³</strong></div>
+                            <div class="text-muted small">@Model.DonGiaNuoc.ToString("N0")đ/m³</div>
+                        </td>
+                        <td class="text-end fw-bold">@Model.TienNuoc.ToString("N0")đ</td>
+                    </tr>
+
+                    <!-- DỊCH VỤ KHÁC -->
+                    <tr>
+                        <td>
+                            <i class="fas fa-wifi text-success me-2"></i>
+                            <strong>Dịch vụ khác</strong>
+                        </td>
+                        <td class="text-center">
+                            <small class="text-muted">Wifi, rác, vệ sinh chung</small>
+                        </td>
+                        <td class="text-end fw-bold">@((Model.TienDichVuKhac ?? 0).ToString("N0"))đ</td>
+                    </tr>
+
+                    <!-- TỔNG CỘNG -->
+                    <tr class="table-primary">
+                        <td colspan="2" class="text-end">
+                            <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>TỔNG CỘNG:</h5>
+                        </td>
+                        <td class="text-end">
+                            <h4 class="mb-0 text-danger">@Model.TongTien.ToString("N0")đ</h4>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            @if (!string.IsNullOrEmpty(Model.GhiChu))
+            {
+                <div class="alert alert-info mt-3">
+                    <strong><i class="fas fa-sticky-note me-2"></i>Ghi chú:</strong>
+                    <p class="mb-0 mt-2">@Model.GhiChu</p>
+                </div>
+            }
+
+            <!-- BUTTONS -->
+            <div class="d-flex gap-2 mt-4">
+                <button onclick="window.print()" class="btn btn-primary">
+                    <i class="fas fa-print me-2"></i>In hóa đơn
+                </button>
+                <button class="btn btn-success">
+                    <i class="fas fa-download me-2"></i>Tải PDF
+                </button>
+                <a asp-action="MyBills" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Quay lại
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR: THÔNG TIN THANH TOÁN -->
+    <div class="col-lg-4">
+        <div class="content-wrapper">
+            <h5 class="mb-3">
+                <i class="fas fa-info-circle me-2"></i>Thông tin thanh toán
+            </h5>
+
+            @if (Model.TrangThai == QuanLyNhaTro.Models.TrangThaiHoaDon.DaThanhToan)
+            {
+                <div class="alert alert-success">
+                    <h6><i class="fas fa-check-circle me-2"></i>Đã thanh toán</h6>
+                    <p class="mb-1">Ngày: <strong>@Model.NgayThanhToan?.ToString("dd/MM/yyyy HH:mm")</strong></p>
+                    <p class="mb-0">Số tiền: <strong>@Model.TongTien.ToString("N0")đ</strong></p>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Chưa thanh toán</h6>
+                    <p class="mb-0">Vui lòng thanh toán trước ngày <strong>05/@(Model.ThangNam.AddMonths(1).ToString("MM/yyyy"))</strong></p>
+                </div>
+
+                <h6 class="mt-4 mb-3">Hướng dẫn thanh toán:</h6>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-university me-2"></i>Chuyển khoản ngân hàng
+                        </h6>
+                        <table class="table table-sm table-borderless mb-0">
+                            <tr>
+                                <td class="text-muted">Ngân hàng:</td>
+                                <td class="fw-bold">Vietcombank</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Số tài khoản:</td>
+                                <td class="fw-bold">1234567890</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Chủ TK:</td>
+                                <td class="fw-bold">Nguyen Van Chu</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Nội dung:</td>
+                                <td class="fw-bold text-danger">
+                                    THANHTOAN @Model.HopDong?.Phong?.TenPhong @Model.ThangNam.ToString("MM/yyyy").Replace("/", "")
+                                </td>
+                            </tr>
+                        </table>
+                        <button class="btn btn-sm btn-outline-primary w-100 mt-2" onclick="copyToClipboard('1234567890')">
+                            <i class="fas fa-copy me-1"></i>Copy STK
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-money-bill-wave me-2"></i>Thanh toán tiền mặt
+                        </h6>
+                        <p class="card-text small mb-2">
+                            Liên hệ chủ trọ để thanh toán trực tiếp
+                        </p>
+                        <button class="btn btn-sm btn-success w-100">
+                            <i class="fas fa-phone me-1"></i>Gọi cho chủ trọ
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="content-wrapper mt-3">
+            <h6 class="mb-3">
+                <i class="fas fa-clock me-2"></i>Lịch sử
+            </h6>
+            <ul class="list-unstyled">
+                <li class="mb-2">
+                    <i class="far fa-calendar text-muted me-2"></i>
+                    <small>Tạo: @Model.NgayTao.ToString("dd/MM/yyyy HH:mm")</small>
+                </li>
+                @if (Model.NgayThanhToan.HasValue)
+                {
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Thanh toán: @Model.NgayThanhToan.Value.ToString("dd/MM/yyyy HH:mm")</small>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Đã copy số tài khoản: ' + text);
+            });
+        }
+    </script>
+
+    <style>
+        @@media print {
+            .sidebar, .top-bar, .btn, .no-print {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+
+            .content-wrapper {
+                box-shadow: none !important;
+            }
+        }
+    </style>
+}
