@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    ViewData["Title"] = "Không có quyền truy cập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-lock"></i> Không có quyền truy cập
+                    </h4>
+                </div>
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-exclamation-triangle fa-5x text-danger mb-4"></i>
+                    <h3 class="mb-3">Bạn không có quyền truy cập trang này</h3>
+                    <p class="lead text-muted mb-4">
+                        Tài khoản của bạn chưa được phân quyền hoặc chưa được gán phòng.
+                    </p>
+
+                    <div class="alert alert-info">
+                        <h5>Các nguyên nhân có thể:</h5>
+                        <ul class="text-left mb-0">
+                            <li>Tài khoản chưa có role phù hợp</li>
+                            <li>Chưa được gán phòng trong hệ thống</li>
+                            <li>Quyền truy cập đã hết hạn</li>
+                        </ul>
+                    </div>
+
+                    <p class="mt-4">
+                        Vui lòng liên hệ quản trị viên để được hỗ trợ.
+                    </p>
+
+                    <div class="mt-4">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary btn-lg">
+                            <i class="fas fa-home"></i> Về trang chủ
+                        </a>
+                        <a href="@Url.Action("Logout", "Account", new { area = "Identity" })" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    <i class="fas fa-envelope"></i> Email hỗ trợ: admin@quanlynhatro.com
+                    <br>
+                    <i class="fas fa-phone"></i> Hotline: 1900-xxxx
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fa-5x {
+        font-size: 5rem;
+    }
+</style>

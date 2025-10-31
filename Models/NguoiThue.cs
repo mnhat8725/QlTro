@@ -31,6 +31,8 @@ namespace QuanLyNhaTro.Models
 
         [Display(Name = "Ảnh Chân Dung")]
         public string? AnhChanDung { get; set; }
+        [StringLength(450)]
+        public string? UserId { get; set; }
 
         public ICollection<HopDong> HopDongs { get; set; } = new List<HopDong>();
     }

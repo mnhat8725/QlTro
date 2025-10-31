@@ -1,0 +1,125 @@
+﻿@model QuanLyNhaTro.Models.HoaDon
+@using QuanLyNhaTro.Models
+@{
+    ViewData["Title"] = "Chi tiết hóa đơn";
+}
+
+<link rel="stylesheet" href="~/css/hoadons.css" />
+
+<div class="invoice-header text-center">
+    <h2 class="fw-bold mb-2">Chi tiết hóa đơn tháng @Model.ThangNam.ToString("MM/yyyy")</h2>
+    <p class="mb-0">Phòng: <strong>@Model.HopDong?.Phong?.TenPhong</strong></p>
+    <p>Người thuê: <strong>@Model.HopDong?.NguoiThue?.HoTen</strong></p>
+</div>
+
+<div class="card invoice-detail-card p-4 fade-in">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="invoice-info-box">
+                <div class="info-label">Tiền phòng</div>
+                <div class="info-value">@Model.TienPhong.ToString("N0") VNĐ</div>
+            </div>
+
+            <div class="invoice-info-box">
+                <div class="info-label">Điện (chỉ số cũ → mới)</div>
+                <div class="info-value">
+                    @Model.ChiSoDienCu → @Model.ChiSoDienMoi
+                    <br />Đơn giá: @Model.DonGiaDien.ToString("N0") VNĐ/kWh
+                </div>
+            </div>
+
+            <div class="invoice-info-box">
+                <div class="info-label">Nước (chỉ số cũ → mới)</div>
+                <div class="info-value">
+                    @Model.ChiSoNuocCu → @Model.ChiSoNuocMoi
+                    <br />Đơn giá: @Model.DonGiaNuoc.ToString("N0") VNĐ/m³
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="invoice-info-box">
+                <div class="info-label">Dịch vụ khác</div>
+                <div class="info-value">@Model.TienDichVuKhac?.ToString("N0")  VNĐ</div>
+            </div>
+
+            <div class="invoice-info-box">
+                <div class="info-label">Ghi chú</div>
+                <div class="info-value">@Model.GhiChu</div>
+            </div>
+
+            <div class="invoice-info-box">
+                <div class="info-label">Ngày tạo hóa đơn</div>
+                <div class="info-value">@Model.NgayTao.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            @if (Model.NgayThanhToan != null)
+            {
+                <div class="invoice-info-box">
+                    <div class="info-label">Ngày thanh toán</div>
+                    <div class="info-value">@Model.NgayThanhToan?.ToString("dd/MM/yyyy")</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <table class="table detail-table mt-4">
+        <thead>
+            <tr>
+                <th>Mục</th>
+                <th>Chi tiết</th>
+                <th class="text-end">Số tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="item-name">Tiền phòng</td>
+                <td class="item-description">Thuê phòng @Model.HopDong?.Phong?.TenPhong</td>
+                <td class="text-end">@Model.TienPhong.ToString("N0")</td>
+            </tr>
+            <tr>
+                <td class="item-name">Tiền điện</td>
+                <td class="item-description">
+                    (@Model.ChiSoDienMoi - @Model.ChiSoDienCu) × @Model.DonGiaDien.ToString("N0")
+                </td>
+                <td class="text-end">@((Model.ChiSoDienMoi - Model.ChiSoDienCu) * Model.DonGiaDien)</td>
+            </tr>
+            <tr>
+                <td class="item-name">Tiền nước</td>
+                <td class="item-description">
+                    (@Model.ChiSoNuocMoi - @Model.ChiSoNuocCu) × @Model.DonGiaNuoc.ToString("N0")
+                </td>
+                <td class="text-end">@((Model.ChiSoNuocMoi - Model.ChiSoNuocCu) * Model.DonGiaNuoc)</td>
+            </tr>
+            <tr>
+                <td class="item-name">Dịch vụ khác</td>
+                <td class="item-description">Các khoản phụ phí</td>
+                <td class="text-end">@Model.TienDichVuKhac?.ToString("N0") VND</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" class="text-end">Tổng cộng</td>
+                <td class="text-end total-amount">@Model.TongTien.ToString("N0") VNĐ</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="payment-status-box @(Model.TrangThai == TrangThaiHoaDon.DaThanhToan ? "paid" : "unpaid")">
+        <i class="payment-status-icon @(Model.TrangThai == TrangThaiHoaDon.DaThanhToan ? "paid bi bi-check-circle-fill" : "unpaid bi bi-clock-fill")"></i>
+        <div class="payment-status-text">
+            <div class="status-title">
+                @(Model.TrangThai == TrangThaiHoaDon.DaThanhToan ? "ĐÃ THANH TOÁN" : "CHƯA THANH TOÁN")
+            </div>
+            @if (Model.NgayThanhToan != null)
+            {
+                <div class="status-date">Ngày: @Model.NgayThanhToan?.ToString("dd/MM/yyyy")</div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Sửa</a>
+    <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại danh sách</a>
+</div>

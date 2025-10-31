@@ -1,0 +1,265 @@
+﻿@model QuanLyNhaTro.Models.HoaDon
+
+@{
+    ViewData["Title"] = "Tạo hóa đơn mới";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/hoadons.css" asp-append-version="true" />
+}
+
+<div class="container-fluid fade-in">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">
+                <i class="fas fa-plus-circle text-primary"></i> Tạo hóa đơn mới
+            </h2>
+            <p class="text-muted mb-0">Tạo hóa đơn tiền phòng cho tháng mới</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card shadow-custom rounded-custom">
+                <div class="card-body p-4">
+                    <form asp-action="Create" id="createForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Thông tin cơ bản -->
+                        <div class="form-section">
+                            <h5 class="form-section-title">
+                                <i class="fas fa-info-circle text-primary"></i> Thông tin cơ bản
+                            </h5>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label asp-for="HopDongId" class="form-label">
+                                        <i class="fas fa-file-contract"></i> Hợp đồng <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="HopDongId" class="form-select" asp-items="ViewBag.HopDongId" id="hopDongSelect">
+                                        <option value="">-- Chọn hợp đồng --</option>
+                                    </select>
+                                    <span asp-validation-for="HopDongId" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="ThangNam" class="form-label">
+                                        <i class="fas fa-calendar-alt"></i> Tháng/Năm <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="ThangNam" type="month" class="form-control"
+                                           value="@ViewBag.ThangNamMacDinh?.ToString("yyyy-MM")" />
+                                    <span asp-validation-for="ThangNam" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="TienPhong" class="form-label">
+                                    <i class="fas fa-home"></i> Tiền phòng <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="TienPhong" type="number" class="form-control"
+                                           placeholder="Nhập tiền phòng" id="tienPhong" />
+                                    <span class="input-group-text">đ</span>
+                                </div>
+                                <span asp-validation-for="TienPhong" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Điện -->
+                        <div class="form-section">
+                            <h5 class="form-section-title">
+                                <i class="fas fa-bolt text-warning"></i> Tiền điện
+                            </h5>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label asp-for="ChiSoDienCu" class="form-label">Chỉ số cũ</label>
+                                    <input asp-for="ChiSoDienCu" type="number" class="form-control"
+                                           placeholder="0" id="chiSoDienCu" value="0" />
+                                    <span asp-validation-for="ChiSoDienCu" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label asp-for="ChiSoDienMoi" class="form-label">
+                                        Chỉ số mới <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="ChiSoDienMoi" type="number" class="form-control"
+                                           placeholder="0" id="chiSoDienMoi" value="0" />
+                                    <span asp-validation-for="ChiSoDienMoi" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label asp-for="DonGiaDien" class="form-label">
+                                        Đơn giá <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input asp-for="DonGiaDien" type="number" class="form-control"
+                                               value="3500" id="donGiaDien" />
+                                        <span class="input-group-text">đ</span>
+                                    </div>
+                                    <span asp-validation-for="DonGiaDien" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Tiền điện</label>
+                                    <div class="form-control bg-light text-primary fw-bold" id="tienDien">0 đ</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nước -->
+                        <div class="form-section">
+                            <h5 class="form-section-title">
+                                <i class="fas fa-tint text-info"></i> Tiền nước
+                            </h5>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label asp-for="ChiSoNuocCu" class="form-label">Chỉ số cũ</label>
+                                    <input asp-for="ChiSoNuocCu" type="number" class="form-control"
+                                           placeholder="0" id="chiSoNuocCu" value="0" />
+                                    <span asp-validation-for="ChiSoNuocCu" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label asp-for="ChiSoNuocMoi" class="form-label">
+                                        Chỉ số mới <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="ChiSoNuocMoi" type="number" class="form-control"
+                                           placeholder="0" id="chiSoNuocMoi" value="0" />
+                                    <span asp-validation-for="ChiSoNuocMoi" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label asp-for="DonGiaNuoc" class="form-label">
+                                        Đơn giá <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input asp-for="DonGiaNuoc" type="number" class="form-control"
+                                               value="20000" id="donGiaNuoc" />
+                                        <span class="input-group-text">đ</span>
+                                    </div>
+                                    <span asp-validation-for="DonGiaNuoc" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Tiền nước</label>
+                                    <div class="form-control bg-light text-primary fw-bold" id="tienNuoc">0 đ</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dịch vụ khác -->
+                        <div class="form-section">
+                            <h5 class="form-section-title">
+                                <i class="fas fa-concierge-bell text-secondary"></i> Dịch vụ khác
+                            </h5>
+
+                            <div class="mb-3">
+                                <label asp-for="TienDichVuKhac" class="form-label">
+                                    <i class="fas fa-money-bill-wave"></i> Tiền dịch vụ khác
+                                </label>
+                                <div class="input-group">
+                                    <input asp-for="TienDichVuKhac" type="number" class="form-control"
+                                           placeholder="0" id="tienDichVuKhac" value="0" />
+                                    <span class="input-group-text">đ</span>
+                                </div>
+                                <small class="text-muted">Ví dụ: Internet, rác, bảo vệ...</small>
+                                <span asp-validation-for="TienDichVuKhac" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="GhiChu" class="form-label">
+                                    <i class="fas fa-sticky-note"></i> Ghi chú
+                                </label>
+                                <textarea asp-for="GhiChu" class="form-control" rows="3"
+                                          placeholder="Ghi chú thêm về hóa đơn..."></textarea>
+                                <span asp-validation-for="GhiChu" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Tổng tiền -->
+                        <div class="total-box">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h5 class="total-label mb-0">
+                                        <i class="fas fa-calculator"></i> TỔNG CỘNG:
+                                    </h5>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <h3 class="total-value mb-0" id="tongTien">0 đ</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                                <i class="fas fa-times"></i> Hủy
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-save"></i> Tạo hóa đơn
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            // Load chỉ số cũ khi chọn hợp đồng
+            $('#hopDongSelect').change(function() {
+                var hopDongId = $(this).val();
+                if (hopDongId) {
+                    $.get('@Url.Action("GetLatestMeters")', { hopDongId: hopDongId }, function(data) {
+                        $('#chiSoDienCu').val(data.chiSoDienCu);
+                        $('#chiSoNuocCu').val(data.chiSoNuocCu);
+                        calculateTotal();
+                    });
+                }
+            });
+
+            // Tính tổng tiền khi thay đổi
+            $('#chiSoDienCu, #chiSoDienMoi, #donGiaDien, #chiSoNuocCu, #chiSoNuocMoi, #donGiaNuoc, #tienPhong, #tienDichVuKhac')
+                .on('input', calculateTotal);
+
+            function calculateTotal() {
+                // Tiền phòng
+                var tienPhong = parseFloat($('#tienPhong').val()) || 0;
+
+                // Tiền điện
+                var chiSoDienCu = parseFloat($('#chiSoDienCu').val()) || 0;
+                var chiSoDienMoi = parseFloat($('#chiSoDienMoi').val()) || 0;
+                var donGiaDien = parseFloat($('#donGiaDien').val()) || 0;
+                var soDien = Math.max(0, chiSoDienMoi - chiSoDienCu);
+                var tienDien = soDien * donGiaDien;
+                $('#tienDien').text(tienDien.toLocaleString('vi-VN') + ' đ');
+
+                // Tiền nước
+                var chiSoNuocCu = parseFloat($('#chiSoNuocCu').val()) || 0;
+                var chiSoNuocMoi = parseFloat($('#chiSoNuocMoi').val()) || 0;
+                var donGiaNuoc = parseFloat($('#donGiaNuoc').val()) || 0;
+                var soNuoc = Math.max(0, chiSoNuocMoi - chiSoNuocCu);
+                var tienNuoc = soNuoc * donGiaNuoc;
+                $('#tienNuoc').text(tienNuoc.toLocaleString('vi-VN') + ' đ');
+
+                // Dịch vụ khác
+                var tienDichVuKhac = parseFloat($('#tienDichVuKhac').val()) || 0;
+
+                // Tổng
+                var tongTien = tienPhong + tienDien + tienNuoc + tienDichVuKhac;
+                $('#tongTien').text(tongTien.toLocaleString('vi-VN') + ' đ');
+            }
+
+            // Initial calculation
+            calculateTotal();
+        });
+    </script>
+}

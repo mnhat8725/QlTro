@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuanLyNhaTro.Data;
 using QuanLyNhaTro.Models;
+using System.Security.Claims;
 
 namespace QuanLyNhaTro.Controllers
 {
@@ -18,6 +19,7 @@ namespace QuanLyNhaTro.Controllers
             _context = context;
             _userManager = userManager;
         }
+
 
         // GET: Tenant/Index - Dashboard
         public async Task<IActionResult> Index()
@@ -213,17 +215,18 @@ namespace QuanLyNhaTro.Controllers
         }
 
         // Helper method: Lấy người thuê hiện tại
+        // ⭐ THAY ĐỔI CHÍNH Ở ĐÂY ⭐
         private async Task<NguoiThue?> GetCurrentNguoiThueAsync()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
+            // Lấy UserId của user đăng nhập
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
                 return null;
 
-            // Tìm người thuê dựa trên số điện thoại hoặc email
+            // Tìm người thuê dựa trên UserId
             var nguoiThue = await _context.NguoiThues
-                .FirstOrDefaultAsync(n =>
-                    n.SoDienThoai == currentUser.PhoneNumber ||
-                    n.SoDienThoai == currentUser.Email);
+                .FirstOrDefaultAsync(n => n.UserId == userId);
 
             return nguoiThue;
         }

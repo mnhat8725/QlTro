@@ -1,0 +1,147 @@
+﻿@model QuanLyNhaTro.Models.HoaDon
+@using QuanLyNhaTro.Models
+
+@{
+    ViewData["Title"] = "Chỉnh sửa hóa đơn";
+}
+
+<link rel="stylesheet" href="~/css/hoadons.css" />
+
+<div class="invoice-header text-center">
+    <h2 class="fw-bold mb-2">Chỉnh sửa hóa đơn tháng @Model.ThangNam.ToString("MM/yyyy")</h2>
+    <p>Phòng: <strong>@Model.HopDong?.Phong?.TenPhong</strong></p>
+</div>
+
+<div class="card invoice-detail-card p-4 fade-in">
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <!-- Thông tin cơ bản -->
+        <div class="form-section">
+            <div class="form-section-title"><i class="bi bi-info-circle"></i> Thông tin chung</div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="HopDongId" class="form-label">Hợp đồng</label>
+                    <select asp-for="HopDongId" class="form-select" asp-items="ViewBag.HopDongId"></select>
+                    <span asp-validation-for="HopDongId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ThangNam" class="form-label">Tháng/Năm</label>
+                    <input asp-for="ThangNam" type="date" class="form-control" />
+                    <span asp-validation-for="ThangNam" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tiền phòng và điện nước -->
+        <div class="form-section">
+            <div class="form-section-title"><i class="bi bi-lightning"></i> Điện, nước & tiền phòng</div>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="TienPhong" class="form-label">Tiền phòng</label>
+                    <input asp-for="TienPhong" class="form-control" />
+                    <span asp-validation-for="TienPhong" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="ChiSoDienCu" class="form-label">Chỉ số điện cũ</label>
+                    <input asp-for="ChiSoDienCu" class="form-control" />
+                    <span asp-validation-for="ChiSoDienCu" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="ChiSoDienMoi" class="form-label">Chỉ số điện mới</label>
+                    <input asp-for="ChiSoDienMoi" class="form-control" />
+                    <span asp-validation-for="ChiSoDienMoi" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="DonGiaDien" class="form-label">Đơn giá điện</label>
+                    <input asp-for="DonGiaDien" class="form-control" />
+                    <span asp-validation-for="DonGiaDien" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="ChiSoNuocCu" class="form-label">Chỉ số nước cũ</label>
+                    <input asp-for="ChiSoNuocCu" class="form-control" />
+                    <span asp-validation-for="ChiSoNuocCu" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="ChiSoNuocMoi" class="form-label">Chỉ số nước mới</label>
+                    <input asp-for="ChiSoNuocMoi" class="form-control" />
+                    <span asp-validation-for="ChiSoNuocMoi" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="DonGiaNuoc" class="form-label">Đơn giá nước</label>
+                    <input asp-for="DonGiaNuoc" class="form-control" />
+                    <span asp-validation-for="DonGiaNuoc" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dịch vụ khác & ghi chú -->
+        <div class="form-section">
+            <div class="form-section-title"><i class="bi bi-list-task"></i> Dịch vụ & ghi chú</div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="TienDichVuKhac" class="form-label">Tiền dịch vụ khác</label>
+                    <input asp-for="TienDichVuKhac" class="form-control" />
+                    <span asp-validation-for="TienDichVuKhac" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="TrangThai" class="form-label">Trạng thái</label>
+                    <select asp-for="TrangThai" class="form-select">
+                        <option value="@TrangThaiHoaDon.ChuaThanhToan">Chưa thanh toán</option>
+                        <option value="@TrangThaiHoaDon.DaThanhToan">Đã thanh toán</option>
+                    </select>
+                    <span asp-validation-for="TrangThai" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="GhiChu" class="form-label">Ghi chú</label>
+                    <textarea asp-for="GhiChu" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="GhiChu" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ngày tạo & thanh toán -->
+        <div class="form-section">
+            <div class="form-section-title"><i class="bi bi-calendar"></i> Ngày tạo & thanh toán</div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="NgayTao" class="form-label">Ngày tạo</label>
+                    <input asp-for="NgayTao" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="NgayTao" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="NgayThanhToan" class="form-label">Ngày thanh toán</label>
+                    <input asp-for="NgayThanhToan" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="NgayThanhToan" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nút hành động -->
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save"></i> Lưu thay đổi</button>
+            <a asp-action="Index" class="btn btn-secondary px-4"><i class="bi bi-arrow-left"></i> Quay lại</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
