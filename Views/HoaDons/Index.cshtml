@@ -180,8 +180,13 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
+                                    @{
+                                        var rand = new Random();
+                                        string suffix = ((char)rand.Next(65, 90)).ToString() + rand.Next(10, 99).ToString();
+                                        string code = $"HD{item.Id:D5}{suffix}";
+                                    }
                                     <td>
-                                        <span class="invoice-code">#HD@item.Id.ToString("D5")</span>
+                                        <span class="invoice-code">#@code</span>
                                     </td>
                                     <td>
                                         <i class="icon-col fas fa-door-open"></i>

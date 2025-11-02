@@ -13,7 +13,9 @@ namespace QuanLyNhaTro.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HopDongsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public HopDongsController(
+            ApplicationDbContext context,
+            IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
@@ -55,6 +57,7 @@ namespace QuanLyNhaTro.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Upload ảnh hợp đồng (nếu có)
                 if (anhHopDong != null && anhHopDong.Length > 0)
                 {
                     string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "hopdongs");
@@ -71,15 +74,20 @@ namespace QuanLyNhaTro.Controllers
                     hopDong.AnhHopDongUrl = "/uploads/hopdongs/" + uniqueFileName;
                 }
 
+                // Lưu hợp đồng
                 _context.Add(hopDong);
                 await _context.SaveChangesAsync();
 
+                // Cập nhật trạng thái phòng
                 var phong = await _context.Phongs.FindAsync(hopDong.PhongId);
                 if (phong != null)
                 {
                     phong.TinhTrang = TinhTrangPhong.DaThue;
                     await _context.SaveChangesAsync();
                 }
+
+                // Thông báo thành công
+                TempData["SuccessMessage"] = "Tạo hợp đồng thành công!";
 
                 return RedirectToAction(nameof(Index));
             }

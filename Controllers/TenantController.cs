@@ -218,15 +218,14 @@ namespace QuanLyNhaTro.Controllers
         // ⭐ THAY ĐỔI CHÍNH Ở ĐÂY ⭐
         private async Task<NguoiThue?> GetCurrentNguoiThueAsync()
         {
-            // Lấy UserId của user đăng nhập
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = await _userManager.GetUserAsync(User);
 
-            if (string.IsNullOrEmpty(userId))
+            if (currentUser == null)
                 return null;
 
-            // Tìm người thuê dựa trên UserId
+            // Tìm theo SỐ ĐIỆN THOẠI (Username)
             var nguoiThue = await _context.NguoiThues
-                .FirstOrDefaultAsync(n => n.UserId == userId);
+                .FirstOrDefaultAsync(n => n.SoDienThoai == currentUser.UserName);
 
             return nguoiThue;
         }
